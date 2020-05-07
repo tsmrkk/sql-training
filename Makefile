@@ -12,5 +12,5 @@ down:
 mysql:
 	mysql -u root -h localhost --protocol tcp -p $(DBNAME)
 
-migrate/init:
-	mysql -u root -h localhost --protocol tcp -e "create database \`$(DBNAME)\`" -p
+# migrate/init:
+# 	mysql -u root -h localhost --protocol tcp -e "create database \`$(DBNAME)\`" -p
