@@ -1,4 +1,4 @@
-# 第ニ章
+# Day 2
 ## CREATE
 TableやDBの作成をするときに使う
 
