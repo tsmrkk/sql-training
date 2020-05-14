@@ -70,3 +70,77 @@ GO
 SELECT price, COUNT(title) FROM tbl_ehon GROUP BY price
 HAVING COUNT(title) = 1;
 ```
+
+## サブクエリ
+SELECT文の中にもう一つSELECT文を書くことが可能。入れ子になったSELECT文をサブクエリといい、外側にあるSELECT文をメインクエリという。サブクエリで取り出した結果(入れ子になっている方のSELECT文)を基にメインクエリ(外側のSELECT文)が実行される
+
+## INSERT文
+### 列名を省略して登録する場合
+
+```
+INSERT INTO tbl_tea VALUES (2, '紅茶', 850);
+```
+
+### 特定の列にのみ値を登録する場合
+
+```
+INSERT INTO tbl_tea (name, code) VALUES ('ほうじ茶', 3)
+```
+
+### SELECT文の結果を登録する場合
+
+```
+INSERT INTO tbl_petlist (id, name) SELECT no, name FROM tbl_cat
+```
+
+## UPDATE文
+
+### 1つの値を更新する
+SETで更新する列名と新しい値を指定する
+
+```
+UPDATE tbl_lunch SET price = 760 WHERE code = 2;
+```
+
+### 複数の値を更新する
+複数の列の値を更新するうには、更新内容を感まで区切って列挙する
+
+```
+UPDATE tbl_lunch
+  SET menu = '今日のランチ', price = 790 WHERE code = 1;
+```
+
+## DELETE文
+### 条件と一致したデータを削除する
+
+```
+DELETE FROM tbl_tel WHERE name = '花田';
+```
+
+### すべてのデータを削除する
+
+```
+DELETE FROM tbl_tel
+```
+
+## サブクエリ
+### WHERE句でサブクエリを使用する
+
+```
+SELECT * FROM tbl_cake
+  WHERE price >= (SELECT AVG(price) FROM tbl_cake);
+```
+
+### HAVING句でサブクエリを使用する
+
+```
+SELECT code, MIN(arrival) FROM tbl_stock GROUP BY code
+  HAVING MIN(arrival) < (SELECT AVG(shipment) FROM tbl_stock);
+```
+
+### FROM句でサブクエリを使用する
+
+```
+SELECT MIN(price) FROM
+  (SELECT * FROM tbl_cake WHERE price >= 250) AS c_price
+```
