@@ -101,6 +101,49 @@ SLECT * FROM table t1 FULL OUTER JOIN table t2 ON t1.id = t2.id
 |||4|ku|
 
 ## ビューの作成
+ビューテーブルは、仮想テーブルであり、ユーザー毎に実行可能な処理をきめたり、ユーザーがみやすいようにテーブルを加工して見せることが可能である。また、ビューの実体はSQL文であり、テーブルのように大きな容量を必要としない。また、変更が比較的容易である。
+
+order table
+
+|id|order_by|
+|---|---|
+|120|yamada|
+|119|tanaka|
+
+detail table
+
+|id|number|merchandise|
+|---|---|---|
+|120|1|egg|
+|120|2|bread|
+|119|3|rice|
+
+```
+CREATE VIEW yamada_order_merchandise
+  AS SELECT * FROM order, detail
+    WHERE order.id = detail.id
+    AND order.order_by = 'yamada'
+    WITH CHECK OPTION
+```
+
+上のクエリを実行すると以下のような結果になる。
+
+yamada_order_merchandise
+
+|id|order_by|number|merchandise|
+|---|---|---|---|
+|120|yamada|1|egg|
+|120|yamada|2|bread|
+
+以下のクエリを実行するとビューの削除ができる
+
+```
+DROP VIEW yamada_order_merchandise
+```
+
+ビューからデータを追加・更新・削除する場合、あたかもテーブルのデータを操作するように記述することが可能であるが、条件によっては追加・更新・削除ができない場合がある。
+
+<img src="./1.png">
 
 ## ビューの利用
 
@@ -109,6 +152,7 @@ SLECT * FROM table t1 FULL OUTER JOIN table t2 ON t1.id = t2.id
 ## 限定述語
 
 ## インデックス
+インデックス（索引）とは、テーブルに格納されているデータに素早くたどり着くための仕組み。本の索引のようなものだと理解すると良い。テーブルを作成する際に、カラムに対して必要に応じて定義する。カラムに対して、インデックスを作成することを「インデックスを張る」とも言ったりする。
 
 ## トランザクション
 
