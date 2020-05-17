@@ -146,6 +146,31 @@ DROP VIEW yamada_order_merchandise
 <img src="./1.png" width="200%">
 
 ## 集合演算子
+### UNION
+和集合を表したいときに使う。
+
+```
+SELECT * FROM num_table where num in (1,2,3)
+UNION
+SELECT * FROM num_table where num in (3,4,5)
+```
+
+上のクエリを実行すると
+
+結果
+
+```
+{1,2,3,4 5}
+```
+
+### UNION ALL
+A, B に含まれる要素すべてが結果になる。重複要素も全件出る。
+
+```
+SELECT * FROM num_table where num in (1,2,3)
+UNION ALL
+SELECT * FROM num_table where num in (3,4,5)
+```
 
 ## 限定述語
 
