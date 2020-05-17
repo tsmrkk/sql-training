@@ -173,6 +173,61 @@ SELECT * FROM num_table where num in (3,4,5)
 ```
 
 ## 限定述語
+### ALL演算子
+サブクエリによって取り出されたすべての値と比較を行う。
+
+以下の例では、すべての英語の点数より高い数学の点数を表示している
+
+```
+SELECT * FROM tbl_exam
+  WHERE math >= ALL(
+    SELECT eng FROM tbl_exam
+  );
+```
+
+結果
+
+|id|eng|math|memo|
+|---|---|---|---|
+|120|0|95|nothing really matters|
+
+### EXISTS演算子
+サブクエリに取り出されたデータが一つでもあれば、メインクエリを実行し、なければ無効にする。
+
+以下の例では、英語で70点以上のものがいれば。全生徒のデータを取得する。
+
+```
+SELECT * FROM tbl_std
+  WHERE EXISTS (
+    SELECT eng FROM tbl_exam
+      WHERE eng > 70
+  );
+```
+
+結果
+
+|id|entrance|name|eng_name|addr1|addr2|
+|---|---|---|---|---|---|
+|0001|2020-04-01|砂糖|Taro Sato|hokkaido|1-9-3|
+|0002|2018-08-01|潮|San Shio|shinjuku|2-9-2|
+|0003|2002-01-01|徐|Ko Jo|akita|9-3-2|
+
+
+### ANY演算子
+サブクエリによって取り出された値のいずれかと比較する。
+
+以下の例では、試験を受けているものの生徒一覧データを取得する
+
+```
+SELECT * FROM tbl_std WHERE id=ANY(SELECT id FROM tbl_exam);
+```
+
+結果
+
+|id|entrance|name|eng_name|addr1|addr2|
+|---|---|---|---|---|---|
+|0001|2020-04-01|砂糖|Taro Sato|hokkaido|1-9-3|
+|0002|2018-08-01|潮|San Shio|shinjuku|2-9-2|
 
 ## インデックス
 インデックス（索引）とは、テーブルに格納されているデータに素早くたどり着くための仕組み。本の索引のようなものだと理解すると良い。テーブルを作成する際に、カラムに対して必要に応じて定義する。カラムに対して、インデックスを作成することを「インデックスを張る」とも言ったりする。
