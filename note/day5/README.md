@@ -36,7 +36,7 @@ SLECT * FROM table t1 INNER JOIN table t2 ON t1.id = t2.id
 結果
 
 |id|hiragana|id|eng|
-|---|---|
+|---|---|---|---|
 |2|い|2|ka|
 |3|う|3|ki|
 
@@ -68,7 +68,7 @@ SLECT * FROM table t1 LEFT OUTER JOIN table t2 ON t1.id = t2.id
 結果
 
 |id|hiragana|id|eng|
-|---|---|
+|---|---|---|---|
 |1|あ|||
 |2|い|2|ka|
 |3|う|3|ki|
@@ -82,7 +82,7 @@ SLECT * FROM table t1 RIGHT OUTER JOIN table t2 ON t1.id = t2.id
 結果
 
 |id|hiragana|id|eng|
-|---|---|
+|---|---|---|---|
 |2|い|2|ka|
 |3|う|3|ki|
 |||4|ku|
@@ -94,7 +94,7 @@ SLECT * FROM table t1 FULL OUTER JOIN table t2 ON t1.id = t2.id
 ```
 
 |id|hiragana|id|eng|
-|---|---|
+|---|---|---|---|
 |1|あ|||
 |2|い|2|ka|
 |3|う|3|ki|
