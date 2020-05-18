@@ -233,40 +233,136 @@ SELECT * FROM tbl_std WHERE id=ANY(SELECT id FROM tbl_exam);
 インデックス（索引）とは、テーブルに格納されているデータに素早くたどり着くための仕組み。本の索引のようなものだと理解すると良い。テーブルを作成する際に、カラムに対して必要に応じて定義する。カラムに対して、インデックスを作成することを「インデックスを張る」とも言ったりする。
 
 ## トランザクション
+データベースに対して行われる1つ以上の更新処理のこと。トランザクションによってデータ更新処理の確定や取り消しが 管理できる。
 
-## コミットとロールバック
+以下の例では、2角更新処理をトランザクションで処理している。開始文は`START TRANSACTION`で、処理を確定させるために`COMMIT`を最後に宣言している。
 
+```
+START TRANSACTION;
+
+UPDATE SAMPLE_TABLE
+SET NAME = 'ABC'
+WHERE ID = 1;
+
+UPDATE SAMPLE_TABLE
+SET NAME = 'EFG'
+WHERE ID = 2;
+
+COMMIT
+```
+
+## COMMIT
+トランザクションを確定させる処理。一度COMMITした結果は 元に戻すことができないので注意が必要。
+
+## ROLLBACK
+ROLLBACKはトランザクションを取り消す処理。ROLLBACKした場合、データベースはトランザクション開始前の状態に戻る。
+
+<!--
+TODO
 ## ロックの仕組み
-
 ## デッドロック
+## プリペアドステートメント
+[MySQL prepared statement document](https://dev.mysql.com/doc/refman/5.7/en/sql-prepared-statements.html)
+-->
 
 ## 動的SQL
+実行するたびにSQLを解析して実行形式に変換するため、処理効率が悪い。実行時にSQLの文字列を組み立てるため、探索条件を変更する時の自由度が高い。
 
+以下の例は動的SQLの例である。
+
+```
+DECLARE @birthYear int = 1970
+DECLARE @statement int = NVARCHAR(4000)
+
+WHILE @birthYear <= 1971
+BEGIN
+  SET @stamenet = '
+    SELECT JobTitle, Count(BusinessEntityID)
+    FROM HumanResource.Employee
+    WHERE Year(BirthDate) = ' + '
+    CAST(@birthYear AS NVARCHAR) +
+    'GROUP BY JobTitle'
+  '
+
+  EXECUTE sp_executesql @statement
+  SET @birthYear = @birthYear + 1
+END
+```
+
+`sp_executesql @statement`は、変数に保存されているSQLトランザクションを実行する。`sp_executesql`は`system stored procedure`の一つである。以下のようにすれば、実行できる。
+
+```
+  EXECUTE sp_executesql @statement
+```
+
+`EXECUTE` or `EXEC`コマンドは動的SQLを実行する。
+
+```
+EXECUTE @statement
+```
+
+<!--
+TODO
+## EXECUTE vs sp_executesql
 ## ストアドプロシージャ
+イメージ的には関数。一連の操作をまとめておけて、動的に値を外部から与えて実行結果を変更することが可能
+-->
 
 ## トリガー
+特定のテーブルに対する(挿入・更新・削除)をトリガーに、予め、定義された処理を自動的に実行する機能のこと。実行タイミングとしては、指定された操作が実行される直前、または直後。
+
+以下がトリガーの例。顧客ごとの累計売上高をテーブルと保持することが目的。orderテーブルに新たなレコードの挿入がなされたときに、aggregate_tableにも保存するという処理が行われている。
+
+```
+DELIMITER $$
+
+CREATE
+  TRIGGER aggregate_by_customer
+  AFTER INSERT
+  ON orders
+  FROM EACH ROW
+  BEGIN
+    INSERT INTO
+      aggregate_table (customer_id, total_amount)
+    (SELECT customer_id, SUM(total)
+      FROM orders
+      GROUP BY customer_id)
+    ON DUPLICATE KEY UPDATE
+      customer_id = NEW.customer_id
+      , total_amount = (SELECT SUM(total)
+                          FROM orders
+                          WHERE customer_id = NEW.customer_id
+                          GROUP BY customer_id);
+    END $$
+
+    DELIMITER;
+```
+
+実際にトリガーを動かすと、
+
+```
+insert into
+  orders(order_id, customer_id, total)
+values
+  ('7', 'USR002', 222)
+```
+
+このクエリを実行すると、aggregate_tableの値が勝手に更新される。
 
 ## 拡張SQL
-
-## SQLによるプログラミング
-
-## 拡張SQLの変数
-
-## 拡張SQLの制御文
+レコードの抽出や追加、更新などだけではなく、複合文を使って、他の言語のように変数や条件文などを記述する方法。
 
 ## 結果セットとカーソル
 
 ## データベースドライバ
 
-## 列の構成を変更する
-
-## 制約を追加する
-
-## テーブル名、列名を変更する
-
-## 外部キー
-
-## テーブルとデータベースの削除
+<!--
+8章終わり
+-->
 
 ## 予約語
 
+## 参考・引用
+- [Build Dynamic SQL in a Stored Procedure](https://www.essentialsql.com/build-dynamic-sql-stored-procedure/)
+
+- [3分でわかるトリガー - 使い所と問題点を考える -](https://qiita.com/wanko5296/items/fa3620c48196acbd3ab6)
