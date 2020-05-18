@@ -356,11 +356,10 @@ values
 
 ## データベースドライバ
 
-<!--
-8章終わり
--->
 
 ## 予約語
+
+[予約語一覧](https://qiita.com/okazy/items/9dd6552fc678077e27cd)
 
 ## 参考・引用
 - [Build Dynamic SQL in a Stored Procedure](https://www.essentialsql.com/build-dynamic-sql-stored-procedure/)
