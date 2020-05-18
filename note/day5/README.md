@@ -352,13 +352,16 @@ values
 ## 拡張SQL
 レコードの抽出や追加、更新などだけではなく、複合文を使って、他の言語のように変数や条件文などを記述する方法。
 
-## 結果セットとカーソル
+## 結果セット
+結果セットとは、データベースから取り出されたレコード群を一時的に保存する「仮想的なテーブル」のようなもの。SELECT文を実行すると、検索結果がメモリ上に保存される。これを結果セットという。
+
+## カーソル
+データの「検索条件」と「現在位置」を保持して、複数の検索結果を一件ずつ処理するための仕組み。
 
 ## データベースドライバ
-
+A computer program that implements a protocol(ODBC or JDBC) for a database connection. For example,to make database connection in a Java application, we need a JDBC(Java Database Connectivity API). ODBC stands for Open DataBase Connectivity and is a standard API for accessing DBMS
 
 ## 予約語
-
 [予約語一覧](https://qiita.com/okazy/items/9dd6552fc678077e27cd)
 
 ## 参考・引用
