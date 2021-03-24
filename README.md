@@ -1,4 +1,4 @@
-# sql-training
+# sql practice
 sqlの学習用レポジトリ
 
 ## Makefile説明
